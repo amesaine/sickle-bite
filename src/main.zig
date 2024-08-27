@@ -4,8 +4,8 @@ const mem = std.mem;
 const heap = std.heap;
 
 const Chunk = @import("chunk.zig");
-
 const dbg = @import("debug.zig");
+const tokenizer = @import("tokenizer.zig");
 
 var scratch_buf: [3000]u8 = undefined;
 
@@ -13,15 +13,9 @@ const stdout = io.getStdIn().writer();
 const stdin = io.getStdIn().reader();
 
 pub fn main() !void {
-    var gpa = heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
-
-    var chunk = Chunk.init(allocator);
-    defer chunk.deinit();
-
-    try chunk.code.append(Chunk.OpCode.exit);
-
-    dbg.disassembleChunk(&chunk, "exit");
+    const name = "sikolayt";
+    var t = tokenizer.Tokenizer.init(name);
+    _ = t.next();
 }
 
 pub fn startRepl() !void {
